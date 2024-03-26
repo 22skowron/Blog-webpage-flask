@@ -1,0 +1,90 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('{{post.img_url}}')">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="post-heading">
+          <h1>{{ post.title }}</h1>
+          <h2 class="subheading">{{ post.subtitle }}</h2>
+          <span class="meta"
+            >Posted by
+            <a href="#" style="font-weight: bold;">{{ post.author.nickname }}</a>
+            on {{ post.date }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Post Content -->
+<article>
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+
+        {{ post.body|safe }}
+
+        {% if current_user.id in privileged %}
+          <div class="d-flex justify-content-end mb-4">
+            <a
+              class="btn btn-primary float-right"
+              href="{{url_for('edit_post', post_id=post.id)}}"
+              >Edit Post</a
+            >
+        {% endif %}
+        </div>
+
+        <!-- Comments Area -->
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+              <div class=flashes>
+                {% for category, message in messages %}
+
+                  {% if category == 'red': %}
+                    <p style="color: red;">{{ message }}</p>
+                  {% elif category == 'green': %}
+                    <p style="color: lime;">{{ message }}</p>
+                  {% endif %}
+
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+
+        {{ ckeditor.load() }} {{ ckeditor.config(name='body') }}
+        {{ render_form(form) }}
+
+        <div class="comment">
+          {% if post.comments %}
+          <ul class="commentList">
+
+                {% for comment in post.comments %}
+                  <li>
+                    <div class="commenterImage">
+                      <img src="{{ comment.author.email | gravatar }}" />
+                    </div>
+                    <div class="commentText">
+                      <p>{{  comment.body|safe  }}</p>
+                      <span class="date sub-text">
+                        {{  comment.author.nickname  }},
+                        <i>{{  comment.date  }}</i>
+                      </span>
+                    </div>
+                  </li>
+                {% endfor %}
+
+          </ul>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</article>
+
+{% include "footer.html" %}
