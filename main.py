@@ -274,9 +274,14 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/contact")
+@app.route("/contact", methods=['GET', 'POST'])
 def contact():
-    return render_template("contact.html")
+    if request.method == 'POST':
+        return render_template("contact.html", message=["Successfully sent your message!"])
+    
+    else:
+        return render_template("contact.html", message=[])
+
 
 #########################################################################
     # RUN APP

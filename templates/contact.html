@@ -9,11 +9,12 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
         <div class="page-heading">
-          {% if msg_sent: %}
-          <h1>Successfully sent your message</h1>
-          {% else: %}
+          {% if message == []: %}
           <h1>Contact Me</h1>
+          {% else: %}
+          <h1>{{ message[0] }}</h1>
           {% endif %}
+
           <span class="subheading">Have questions? I have answers.</span>
         </div>
       </div>
@@ -84,11 +85,11 @@
             </div>
             <br />
             <button
-              class="btn btn-danger text-uppercase"
+              class="btn btn-primary text-uppercase"
               id="submitButton"
               type="submit"
             >
-              NOT USED in Day 69
+              Send
             </button>
           </form>
         </div>
